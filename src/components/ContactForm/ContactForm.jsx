@@ -1,11 +1,12 @@
 import { useId } from "react";
 import { nanoid } from "nanoid/non-secure";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import contactFormSchema from "../../yup/contactFormSchema";
+import { useDispatch } from "react-redux";
+
+import contactFormSchema from "src/yup/contactFormSchema";
 
 import css from "./contactForm.module.css";
-import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "src/redux/contactsSlice";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
