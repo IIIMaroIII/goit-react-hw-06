@@ -13,11 +13,9 @@ export const contactsSlice = createSlice({
         return item.id !== action.payload;
       });
     },
-    selectContacts() {},
   },
 });
 
-export const { addContact, deleteContact, selectContacts } =
-  contactsSlice.actions;
+export const { addContact, deleteContact } = contactsSlice.actions;
 
 export const contactsReducer = contactsSlice.reducer;
