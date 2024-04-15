@@ -7,10 +7,12 @@ import { selectContacts, selectNameFilter } from "../../redux/selectors";
 const ContactList = () => {
   const items = useSelector(selectContacts);
   const filterName = useSelector(selectNameFilter);
-  const filteredContacts = useMemo(() =>
-    items.filter((item) =>
-      item.name.toLowerCase().includes(filterName.toLowerCase())
-    )
+  const filteredContacts = useMemo(
+    () =>
+      items.filter((item) =>
+        item.name.toLowerCase().includes(filterName.toLowerCase())
+      ),
+    [filterName, items]
   );
   const isFilteredContactsEmpty = filteredContacts.length === 0;
 
