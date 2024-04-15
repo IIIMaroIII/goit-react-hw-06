@@ -1,13 +1,12 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
 
 export const selectContacts = (state) => state.contacts.items;
 export const selectNameFilter = (state) => state.filters.name;
-
-export const selectFilteredContacts = (state) => {
-  const items = selectContacts(state);
-  const filterName = selectNameFilter(state);
-  return items.filter((item) =>
-    item.name.toLowerCase().includes(filterName.toLowerCase())
-  );
-};
+export const selectFilteredContacts = createSelector(
+  [selectContacts, selectNameFilter],
+  (items, filterName) => {
+    return items.filter((item) =>
+      item.name.toLowerCase().includes(filterName.toLowerCase())
+    );
+  }
+);
