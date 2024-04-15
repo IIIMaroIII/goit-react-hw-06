@@ -1,25 +1,29 @@
-import css from './contactList.module.css';
-import Contact from './Contact/Contact';
-import PropTypes, { exact } from 'prop-types';
-import { arrayOf } from 'prop-types';
+import css from "./contactList.module.css";
+import Contact from "./Contact/Contact";
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
-const ContactList = ({ data, onDelete }) => {
-  return (
-    <ul className={css.list}>
-      <Contact onDelete={onDelete} data={data} />
-    </ul>
+const ContactList = () => {
+  const items = useSelector((state) => state.contacts.items);
+  const filterName = useSelector((state) => state.filters.name);
+  const filteredContacts = useMemo(() =>
+    items.filter((item) =>
+      item.name.toLowerCase().includes(filterName.toLowerCase())
+    )
   );
-};
+  const isFilteredContactsEmpty = filteredContacts.length === 0;
 
-ContactList.propTypes = {
-  data: arrayOf(
-    exact({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ),
-  onDelete: PropTypes.func.isRequired,
+  const isContactsEmpty = items.length === 0;
+
+  return (
+    <>
+      {!isContactsEmpty && (
+        <ul className={css.list}>
+          {!isFilteredContactsEmpty && <Contact data={filteredContacts} />}
+        </ul>
+      )}
+    </>
+  );
 };
 
 export default ContactList;

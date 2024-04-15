@@ -1,40 +1,25 @@
-import PropTypes from 'prop-types';
-import { useId } from 'react';
-import { nanoid } from 'nanoid/non-secure';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { useId } from "react";
+import { nanoid } from "nanoid/non-secure";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import contactFormSchema from "../../yup/contactFormSchema";
 
-import * as yup from 'yup';
-import css from './contactForm.module.css';
+import css from "./contactForm.module.css";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
 
-const ContactForm = ({ onAddContact }) => {
-  const ContactFormSchema = yup.object().shape({
-    id: yup.string(),
-    name: yup
-      .string()
-      .min(3, 'At least 3 characters')
-      .max(50, 'You`ve typed more than 50 characters')
-      .required('This input is required'),
-    number: yup
-      .string()
-      .matches(
-        /^\d{1,10}-\d{1,10}-\d{1,10}$/,
-        'Your phone number should have up to 10 digits between each hyphen, and it should not contain any other characters',
-      )
-      .required('This input is required'),
-  });
+const ContactForm = () => {
+  const dispatch = useDispatch();
 
   const values = {
-    id: '',
-    name: '',
-    number: '',
+    id: "",
+    name: "",
+    number: "",
   };
 
   const handleSubmit = (values, actions) => {
     const uniqId = nanoid();
     const newValues = { ...values, id: uniqId };
-    onAddContact(newValues);
-    actions.resetForm();
-
+    dispatch(addContact(newValues));
     actions.resetForm();
   };
 
@@ -42,7 +27,7 @@ const ContactForm = ({ onAddContact }) => {
   const phoneId = useId();
   return (
     <Formik
-      validationSchema={ContactFormSchema}
+      validationSchema={contactFormSchema}
       initialValues={values}
       onSubmit={handleSubmit}
     >
@@ -55,7 +40,7 @@ const ContactForm = ({ onAddContact }) => {
           <ErrorMessage className={css.error} name="name" component="span" />
         </div>
         <div className={css.wrapper}>
-          {' '}
+          {" "}
           <label className={css.label} htmlFor={phoneId}>
             Number
           </label>
@@ -70,7 +55,5 @@ const ContactForm = ({ onAddContact }) => {
     </Formik>
   );
 };
-
-ContactForm.propTypes = { onAddContact: PropTypes.func.isRequired };
 
 export default ContactForm;
